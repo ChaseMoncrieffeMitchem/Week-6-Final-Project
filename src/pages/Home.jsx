@@ -6,11 +6,11 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
 
   async function fetchMovies() {
+    setMovies(data)
     const { data } = await axios.get(
       `http://www.omdbapi.com/?apikey=f5bbb04b&s=fast`
     );
     console.log(data);
-    setMovies(data);
   }
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div>
-      {movies.map((elem) => (
+      {movies.Search.map((elem) => (
         <div className="container">
           <div className="row">
             <div className="movie-list">
