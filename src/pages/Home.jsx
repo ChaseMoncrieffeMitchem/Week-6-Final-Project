@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function () {
+export default function Home() {
 
     async function movies() {
         const movieApi = await fetch("http://www.omdbapi.com/?apikey=f5bbb04b&s=fast")
