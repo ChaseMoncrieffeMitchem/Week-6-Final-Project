@@ -5,20 +5,25 @@ import { useParams } from "react-router-dom";
 const Movies = () => {
   const { id } = useParams();
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true)
+
+  async function getMovies() {
+    setLoading(true)
+    const { data } = await axios.get(
+      `http://www.omdbapi.com/?apikey=f5bbb04b&i=${id}`
+    );
+    setMovies(data);
+    setLoading(false)
+  }
 
   useEffect(() => {
-    async function getMovies() {
-      const { data } = await axios.get(
-        `http://www.omdbapi.com/?apikey=f5bbb04b&s=${id}`
-      );
-      setMovies(data);
-    }
     getMovies();
   }, []);
 
   return (
     <>
-      {movies.map((elem) => (
+      {loading ? (
+      
         <div className="container">
           <div className="row">
             <div className="movie-list">
@@ -28,15 +33,17 @@ const Movies = () => {
                     <h3 className="movie-poster">
                       <img src="" alt="" />
                     </h3>
-                    <p className="movie-title">{elem.Title}</p>
-                    <p className="movie-year">{elem.Year}</p>
+                    <p className="movie-title">Movie Title</p>
+                    <p className="movie-year">Movie Year</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      ))}
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </>
   );
 };
