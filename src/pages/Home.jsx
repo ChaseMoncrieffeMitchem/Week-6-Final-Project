@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import MovieList from "../components/MovieList";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTitle, setSearchTitle] = useState();
+  
+  
 
   function onSearch() {
     fetchMovies(searchTitle);
@@ -24,22 +27,11 @@ export default function Home() {
     fetchMovies();
   }, []);
 
-  async function pageMovies(pageTitle) {
-    setLoading(true);
-    const { data } = await axios.get(
-      `http://www.omdbapi.com/?apikey=f5bbb04b&page=${pageTitle}`
-    );
-    setLoading(false);
-    setMovies(data);
-  }
+  
 
-  function nextPage() {
-    pageMovies();
-  }
+  
 
-  useEffect(() => {
-    pageMovies();
-  }, []);
+  
 
   return (
     <div>
@@ -88,31 +80,6 @@ export default function Home() {
           </div>
         ))
       )}
-      <button onClick={() => nextPage()}>Previous Page</button>
-      {loading ? (
-        <h1>Loading...</h1>
-      ) : (
-        movies.Search.map((elem) => (
-          <div className="container" key={elem.imdbID}>
-            <div className="row">
-              <div className="movie-list">
-                <div className="movie">
-                  <div className="movie-card">
-                    <div className="movie-card__container">
-                      <h3 className="movie-poster">
-                        <img src={elem.Poster} alt="" />
-                      </h3>
-                      <p className="movie-title">{elem.Title}</p>
-                      <p className="movie-year">{elem.Year}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
-      <button>Next Page</button>
     </div>
   );
 }
