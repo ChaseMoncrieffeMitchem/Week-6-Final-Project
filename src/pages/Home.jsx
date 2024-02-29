@@ -6,6 +6,9 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTitle, setSearchTitle] = useState();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(10);
   
   
 
@@ -28,10 +31,21 @@ export default function Home() {
   }, []);
 
   
+  async function pageMovies() {
+    setLoading(true)
+    const response= await axios.get(`http://www.omdbapi.com/?apikey=f5bbb04b&page=${postsPerPage}`)
+    setLoading(false)
+    setMovies(response.data)
+  }
 
+  useEffect(() => {
+    pageMovies()
+  }, [currentPage])
   
 
-  
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = movies.slice(firstPostIndex, lastPostIndex)
 
   return (
     <div>
@@ -80,6 +94,7 @@ export default function Home() {
           </div>
         ))
       )}
+      {loading ? (<h1>Loading...</h1>) : (currentPosts)}
     </div>
   );
 }
