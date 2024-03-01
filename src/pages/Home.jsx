@@ -1,24 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MovieList from "../components/MovieList";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTitle, setSearchTitle] = useState();
-
   const [moviesLoaded, setMoviesLoaded] = useState(4);
-  
-  
 
   function onSearch() {
+    setMoviesLoaded(4);
     fetchMovies(searchTitle);
   }
 
   async function fetchMovies(movieTitle) {
     setLoading(true);
     const { data } = await axios.get(
-      `http://www.omdbapi.com/?apikey=f5bbb04b&s=${movieTitle}`
+      `http://www.omdbapi.com/?apikey=f5bbb04b&s=${movieTitle || "avengers"}`
     );
     setLoading(false);
     setMovies(data);
@@ -26,21 +23,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetchMovies();
+    fetchMovies(searchTitle);
   }, []);
-
-  
-//   async function pageMovies(postsPerPage) {
-//     setLoading(true)
-//     const { data } = await axios.get(`http://www.omdbapi.com/?apikey=f5bbb04b&page=${postsPerPage}`)
-//     setLoading(false)
-//     setMovies(data)
-//   }
-
-//   useEffect(() => {
-//     pageMovies()
-//   }, [])
-  
 
   return (
     <div>
@@ -69,7 +53,7 @@ export default function Home() {
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        movies.Search.slice(0, movies).map((elem) => (
+        movies.Search.slice(0, moviesLoaded).map((elem) => (
           <div className="container" key={elem.imdbID}>
             <div className="row">
               <div className="movie-list">
@@ -89,9 +73,21 @@ export default function Home() {
           </div>
         ))
       )}
-      {moviesLoaded < (movies.length && 10) ? (
-        <button onClick={() => setMoviesLoaded(moviesLoaded + 10)}>Load more Movies</button>
-      ) : ("")}
+      {moviesLoaded < 10 && (
+        <div>
+          <button
+            className="movieLoaded__btn"
+            onClick={() => setMoviesLoaded(moviesLoaded + 2)}
+          >
+            Load more Movies
+          </button>
+        </div>
+      )}
+      {!loading && (!movies || movies.length === 0) && (
+        <div>
+          <p>No Movies found</p>
+        </div>
+      )}
     </div>
   );
 }
