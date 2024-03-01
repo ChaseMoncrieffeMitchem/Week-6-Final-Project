@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import MovieList from "../components/MovieList";
 
 export default function Home() {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([4]);
   const [loading, setLoading] = useState(true);
   const [searchTitle, setSearchTitle] = useState();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+//   const [moviesLoaded, setMoviesLoaded] = useState(10);
   
   
 
@@ -31,21 +30,17 @@ export default function Home() {
   }, []);
 
   
-  async function pageMovies() {
+  async function pageMovies(postsPerPage) {
     setLoading(true)
-    const response= await axios.get(`http://www.omdbapi.com/?apikey=f5bbb04b&page=${postsPerPage}`)
+    const { data } = await axios.get(`http://www.omdbapi.com/?apikey=f5bbb04b&page=${postsPerPage}`)
     setLoading(false)
-    setMovies(response.data)
+    setMovies(data)
   }
 
   useEffect(() => {
     pageMovies()
-  }, [currentPage])
+  }, [])
   
-
-  const lastPostIndex = currentPage * postsPerPage;
-  const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentPosts = movies.slice(firstPostIndex, lastPostIndex)
 
   return (
     <div>
@@ -74,7 +69,7 @@ export default function Home() {
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        movies.Search.map((elem) => (
+        movies?.slice(0, movies).map((elem) => (
           <div className="container" key={elem.imdbID}>
             <div className="row">
               <div className="movie-list">
@@ -94,7 +89,9 @@ export default function Home() {
           </div>
         ))
       )}
-      {loading ? (<h1>Loading...</h1>) : (currentPosts)}
+      {movies < (movies.length && 10) ? (
+        <button onClick={() => setMovies(movies + 10)}>Load more Movies</button>
+      ) : ("")}
     </div>
   );
 }
