@@ -26,6 +26,12 @@ export default function Home() {
     fetchMovies(searchTitle);
   }, []);
 
+  function filterMovies(filter) {
+    if (filter === "A_TO_Z") {
+        setMoviesLoaded(moviesLoaded.Search.slice().sort((a, b) => (a.Title) -(b.Title)))
+    }
+  }
+
   return (
     <div>
       <nav>
@@ -46,6 +52,14 @@ export default function Home() {
                 }}
               />
               <button onClick={() => onSearch()}>Enter</button>
+              <select id="filter" defaultValue="DEFAULT" onChange={(event) => filterMovies(event.target.value)}>
+                <option value="DEFAULT" disabled>
+                  Sort
+                </option>
+                <option value="A_TO_Z">A to Z</option>
+                <option value="Z_TO_A">Z to A</option>
+                <option value="RELEASE DATE">Release Date</option>
+              </select>
             </div>
           </div>
         </div>

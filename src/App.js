@@ -15,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element= {<Home />}/>
         <Route path=":id" element= {<Movies />}/>
+        <Route path="/movielist" Component={MovieList}/>
       </Routes>
     </Router>
   );
