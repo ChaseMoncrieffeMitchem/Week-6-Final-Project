@@ -7,15 +7,17 @@ import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from './components/Pagination';
+import { movies } from "./idk/Api.jsx"
 
 function App() {
+  
 
   return (
     <Router>
       <Routes>
-        <Route path="/" Component= {Home}/>
+        <Route path="/" render={<Home movies={movies}/>}/>
+        <Route path="/movielist" render={() => <MovieList movies={movies} />}/>
         <Route path=":id" Component={Movies}/>
-        <Route path="/movielist" Component={MovieList}/>
       </Routes>
     </Router>
   );
