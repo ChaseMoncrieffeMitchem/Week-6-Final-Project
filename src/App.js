@@ -13,8 +13,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element= {<Home />}/>
-        <Route path=":id" element= {<Movies />}/>
+        <Route path="/" Component= {Home}/>
+        <Route path=":id" Component={Movies}/>
         <Route path="/movielist" Component={MovieList}/>
       </Routes>
     </Router>

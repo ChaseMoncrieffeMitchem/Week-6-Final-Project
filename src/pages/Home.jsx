@@ -2,15 +2,31 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function Home() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchTitle, setSearchTitle] = useState();
-  const [moviesLoaded, setMoviesLoaded] = useState(4);
+
+  function filterMovies(filter) {
+    if(!movies) return;
+    if (filter === "A_TO_Z") {
+        setMovies([...movies].sort((a, b) => (a.Title > b.Title ? 1 :-1)))
+    }
+    if (filter === "Z_TO_A") {
+        setMovies([...movies].sort((a, b) => b.Title > a.Title ? 1 : -1))
+    }
+    if (filter === "RELEASE DATE") {
+        setMovies([...movies].sort((a, b) => a.Year > b.Year ? 1 : -1))
+    }
+  }
 
   function onSearch() {
     setMoviesLoaded(4);
     fetchMovies(searchTitle);
   }
+
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [moviesLoaded, setMoviesLoaded] = useState(4);
+
+  
 
   async function fetchMovies(movieTitle) {
     setLoading(true);
@@ -18,7 +34,7 @@ export default function Home() {
       `http://www.omdbapi.com/?apikey=f5bbb04b&s=${movieTitle || "avengers"}`
     );
     setLoading(false);
-    setMovies(data);
+    setMovies(data.Search);
     console.log(data);
   }
 
@@ -26,11 +42,7 @@ export default function Home() {
     fetchMovies(searchTitle);
   }, []);
 
-  function filterMovies(filter) {
-    if (filter === "A_TO_Z") {
-        setMoviesLoaded(moviesLoaded.Search.slice().sort((a, b) => (a.Title) -(b.Title)))
-    }
-  }
+  
 
   return (
     <div>
@@ -67,7 +79,7 @@ export default function Home() {
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        movies.Search.slice(0, moviesLoaded).map((elem) => (
+        movies.slice(0, moviesLoaded).map((elem) => (
           <div className="container" key={elem.imdbID}>
             <div className="row">
               <div className="movie-list">
